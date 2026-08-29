@@ -1,0 +1,669 @@
+/* ==========================================================================
+   Saved Trips (List View) + Saved Trip Details
+   Scoped entirely under body.st-theme so nothing here can leak onto or
+   affect any other existing Backpackr page. Reuses the same green/blue/
+   purple accent palette, font (Outfit), radii and shadow language as the
+   rest of the app - just applied to a light surface to match the
+   reference design for these two screens.
+   ========================================================================== */
+
+body.st-theme {
+    background: #F3F6F5;
+    background-image: none;
+    color: #1E293B;
+}
+
+/* ---- Sidebar: light variant (visual only, same markup/classes as the
+   shared _sidebar.jsp include - this file is not modified) ---- */
+.st-theme .sidebar {
+    background: #FFFFFF;
+    border-right: 1px solid #E7ECEA;
+}
+
+.st-theme .logo-container {
+    color: #14202E;
+}
+
+.st-theme .nav-links a {
+    color: #64748B;
+}
+
+.st-theme .nav-links li.active a,
+.st-theme .nav-links a:hover {
+    background: rgba(34, 197, 94, 0.12);
+    color: var(--primary-green);
+}
+
+.st-theme .user-profile-section {
+    border-top: 1px solid #E7ECEA;
+}
+
+.st-theme .user-name {
+    color: #14202E;
+}
+
+/* ---- Page header ---- */
+.st-theme .page-title h1 {
+    color: #14202E;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.st-theme .page-title p {
+    color: #64748B;
+}
+
+.st-theme .alert-success {
+    background: rgba(34, 197, 94, 0.1);
+    color: #15803D;
+}
+
+.st-theme .alert-error {
+    background: rgba(239, 68, 68, 0.1);
+    color: #B91C1C;
+}
+
+/* ---- Buttons re-themed for a light surface ---- */
+.st-theme .btn-secondary {
+    background: #FFFFFF;
+    border: 1px solid #DDE3E1;
+    color: #334155;
+}
+
+.st-theme .btn-secondary:hover {
+    background: #F1F5F4;
+    border-color: #C9D2CF;
+}
+
+.st-theme .btn-danger {
+    background: #FFFFFF;
+    border: 1px solid #FBD5D5;
+    color: #DC2626;
+}
+
+.st-theme .btn-danger:hover {
+    background: #DC2626;
+    border-color: #DC2626;
+    color: #FFFFFF;
+}
+
+/* ==========================================================================
+   Toolbar: search / destination filter / sort / view toggle
+   ========================================================================== */
+
+.st-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    align-items: center;
+    margin-bottom: 28px;
+}
+
+.st-search-box {
+    position: relative;
+    flex: 1 1 260px;
+    max-width: 380px;
+}
+
+.st-search-box .st-search-icon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94A3B8;
+    font-size: 0.9rem;
+    pointer-events: none;
+}
+
+.st-input,
+.st-select {
+    width: 100%;
+    padding: 12px 16px 12px 40px;
+    border-radius: 10px;
+    border: 1px solid #E2E8F0;
+    background: #FFFFFF;
+    color: #1E293B;
+    font-size: 0.9rem;
+    font-family: 'Outfit', sans-serif;
+    transition: all 0.2s ease;
+}
+
+.st-select {
+    padding-left: 16px;
+    min-width: 170px;
+    cursor: pointer;
+}
+
+.st-input:focus,
+.st-select:focus {
+    outline: none;
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.12);
+}
+
+.st-view-toggle {
+    display: flex;
+    gap: 4px;
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 10px;
+    padding: 4px;
+    margin-left: auto;
+}
+
+.st-view-toggle button {
+    border: none;
+    background: transparent;
+    padding: 8px 12px;
+    border-radius: 7px;
+    cursor: pointer;
+    color: #94A3B8;
+    font-size: 0.95rem;
+    line-height: 1;
+    transition: all 0.2s ease;
+}
+
+.st-view-toggle button.active {
+    background: var(--primary-green);
+    color: #FFFFFF;
+}
+
+/* ==========================================================================
+   Trip cards - list view (matches reference)
+   ========================================================================== */
+
+.st-trip-list {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.st-trip-card {
+    background: #FFFFFF;
+    border: 1px solid #ECF1EF;
+    border-radius: 16px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    box-shadow: 0 2px 10px rgba(20, 32, 46, 0.04);
+    transition: all 0.25s ease;
+}
+
+.st-trip-card:hover {
+    box-shadow: 0 10px 28px rgba(20, 32, 46, 0.09);
+    transform: translateY(-2px);
+}
+
+.st-trip-thumb {
+    width: 120px;
+    height: 90px;
+    border-radius: 12px;
+    background-size: cover;
+    background-position: center;
+    flex-shrink: 0;
+}
+
+.st-trip-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.st-trip-name-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+}
+
+.st-trip-name-row h2 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #14202E;
+}
+
+.st-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    background: rgba(34, 197, 94, 0.12);
+    color: #15803D;
+}
+
+.st-trip-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    color: #64748B;
+    font-size: 0.85rem;
+    margin-bottom: 6px;
+}
+
+.st-trip-meta span strong {
+    color: #334155;
+    font-weight: 600;
+}
+
+.st-trip-created {
+    font-size: 0.78rem;
+    color: #94A3B8;
+}
+
+.st-trip-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.st-trip-actions .btn {
+    white-space: nowrap;
+    width: 130px;
+}
+
+/* Grid view alternative (toggle-able) */
+.st-trip-list.st-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+
+.st-trip-list.st-grid .st-trip-card {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0;
+    overflow: hidden;
+}
+
+.st-trip-list.st-grid .st-trip-thumb {
+    width: 100%;
+    height: 170px;
+    border-radius: 0;
+}
+
+.st-trip-list.st-grid .st-trip-info,
+.st-trip-list.st-grid .st-trip-actions {
+    padding: 16px;
+}
+
+.st-trip-list.st-grid .st-trip-actions {
+    flex-direction: row;
+    padding-top: 0;
+}
+
+.st-trip-list.st-grid .st-trip-actions .btn {
+    width: auto;
+    flex: 1;
+}
+
+/* ==========================================================================
+   Empty / no-results state
+   ========================================================================== */
+
+.st-theme .empty-state {
+    background: #FFFFFF;
+    border: 1px solid #ECF1EF;
+    color: #64748B;
+}
+
+.st-theme .empty-state h3 {
+    color: #14202E;
+}
+
+/* ==========================================================================
+   Saved Trip Details
+   ========================================================================== */
+
+.st-back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #64748B;
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 18px;
+}
+
+.st-back-link:hover {
+    color: var(--primary-green);
+}
+
+.st-detail-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.st-detail-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.st-hero {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    height: 260px;
+    background-size: cover;
+    background-position: center;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: flex-end;
+}
+
+.st-hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(0deg, rgba(10, 20, 15, 0.82) 0%, rgba(10, 20, 15, 0.15) 65%, rgba(10, 20, 15, 0) 100%);
+}
+
+.st-hero-content {
+    position: relative;
+    z-index: 1;
+    padding: 26px 30px;
+    color: #FFFFFF;
+    width: 100%;
+}
+
+.st-hero-title-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+
+.st-hero-title-row h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+.st-hero-badge {
+    background: rgba(34, 197, 94, 0.9);
+    color: #FFFFFF;
+}
+
+.st-hero-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.92);
+    margin-bottom: 6px;
+}
+
+.st-hero-dates {
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.st-detail-grid {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 24px;
+    align-items: start;
+}
+
+.st-panel {
+    background: #FFFFFF;
+    border: 1px solid #ECF1EF;
+    border-radius: 16px;
+    padding: 22px;
+    box-shadow: 0 2px 10px rgba(20, 32, 46, 0.04);
+    margin-bottom: 24px;
+}
+
+.st-panel h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #14202E;
+    margin-bottom: 18px;
+}
+
+/* Itinerary timeline (light variant of the existing dark .timeline) */
+.st-timeline {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.st-timeline::before {
+    content: "";
+    position: absolute;
+    left: 13px;
+    top: 8px;
+    bottom: 8px;
+    width: 2px;
+    background: #DDE9E3;
+}
+
+.st-timeline-item {
+    display: flex;
+    gap: 14px;
+    position: relative;
+}
+
+.st-timeline-marker {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--primary-green);
+    color: #FFFFFF;
+    font-weight: 700;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    z-index: 1;
+    box-shadow: 0 0 0 4px #FFFFFF;
+}
+
+.st-timeline-body {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 4px;
+    flex-wrap: wrap;
+}
+
+.st-timeline-info h4 {
+    font-size: 0.98rem;
+    font-weight: 700;
+    color: #14202E;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 4px;
+}
+
+.st-timeline-info p {
+    font-size: 0.82rem;
+    color: #64748B;
+}
+
+.st-timeline-category {
+    font-size: 0.62rem;
+    padding: 3px 9px;
+    border-radius: 20px;
+    font-weight: 700;
+    color: #FFFFFF;
+    text-transform: none;
+}
+
+.st-timeline-thumb {
+    width: 56px;
+    height: 56px;
+    border-radius: 10px;
+    background-size: cover;
+    background-position: center;
+    flex-shrink: 0;
+}
+
+/* Map */
+.st-map-box {
+    width: 100%;
+    height: 220px;
+    border-radius: 12px;
+    border: 1px solid #E2E8F0;
+    overflow: hidden;
+}
+
+/* Budget summary */
+.st-budget-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px dashed #EDF2F0;
+    font-size: 0.88rem;
+    color: #475569;
+}
+
+.st-budget-row:last-child {
+    border-bottom: none;
+}
+
+.st-budget-row strong {
+    color: #14202E;
+    font-weight: 700;
+}
+
+.st-budget-row.st-budget-highlight strong {
+    color: #15803D;
+}
+
+/* Notes */
+.st-notes-text {
+    font-size: 0.88rem;
+    line-height: 1.6;
+    color: #475569;
+}
+
+/* ==========================================================================
+   Edit Trip modal
+   ========================================================================== */
+
+.st-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 30, 0.55);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.st-modal-overlay.st-open {
+    display: flex;
+}
+
+.st-modal {
+    background: #FFFFFF;
+    border-radius: 18px;
+    padding: 28px;
+    width: 100%;
+    max-width: 440px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+}
+
+.st-modal h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #14202E;
+    margin-bottom: 18px;
+}
+
+.st-modal .form-group {
+    margin-bottom: 16px;
+}
+
+.st-modal .form-label {
+    color: #334155;
+}
+
+.st-modal .form-control {
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    color: #1E293B;
+}
+
+.st-modal .form-control:focus {
+    border-color: var(--primary-green);
+}
+
+.st-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+
+@media (max-width: 900px) {
+    .st-detail-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .st-trip-card {
+        flex-wrap: wrap;
+    }
+
+    .st-trip-thumb {
+        width: 100%;
+        height: 150px;
+    }
+
+    .st-trip-actions {
+        flex-direction: row;
+        width: 100%;
+    }
+
+    .st-trip-actions .btn {
+        width: auto;
+        flex: 1;
+    }
+
+    .st-hero {
+        height: 220px;
+    }
+
+    .st-hero-title-row h1 {
+        font-size: 1.4rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .st-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .st-search-box,
+    .st-select {
+        max-width: none;
+    }
+
+    .st-view-toggle {
+        margin-left: 0;
+        align-self: flex-start;
+    }
+}

@@ -1,0 +1,1691 @@
+/* ==========================================================================
+   Backpackr Global Stylesheet & Design System
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+    --bg-dark: #0A0F1D;
+    --card-dark: rgba(23, 35, 58, 0.7);
+    --card-border: rgba(255, 255, 255, 0.08);
+    --input-bg: #070C16;
+    
+    --primary-green: #22C55E;
+    --primary-hover: #16A34A;
+    --accent-blue: #3B82F6;
+    --accent-purple: #8B5CF6;
+    
+    --text-white: #FFFFFF;
+    --text-muted: #94A3B8;
+    --text-dark: #1E293B;
+    
+    --danger: #EF4444;
+    --success: #22C55E;
+    --warning: #F59E0B;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Outfit', sans-serif;
+}
+
+body {
+    background-color: var(--bg-dark);
+    background: radial-gradient(circle at 10% 20%, rgba(26, 37, 72, 0.6) 0%, rgba(10, 15, 29, 1) 90%);
+    color: var(--text-white);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+a {
+    color: var(--primary-green);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: var(--primary-hover);
+}
+
+/* ==========================================================================
+   Dashboard Layout Structure
+   ========================================================================== */
+
+.app-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar navigation */
+.sidebar {
+    width: 260px;
+    background: rgba(13, 22, 42, 0.95);
+    border-right: 1px solid var(--card-border);
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    height: 100vh;
+    z-index: 100;
+}
+
+.logo-container {
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo-container span {
+    color: var(--primary-green);
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex-grow: 1;
+}
+
+.nav-links a {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 14px 18px;
+    border-radius: 10px;
+    color: var(--text-muted);
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+
+.nav-links li.active a,
+.nav-links a:hover {
+    background: rgba(34, 197, 94, 0.12);
+    color: var(--primary-green);
+    transform: translateX(5px);
+}
+
+.user-profile-section {
+    border-top: 1px solid var(--card-border);
+    padding-top: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.user-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary-green), var(--accent-blue));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: white;
+    font-size: 1.1rem;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    max-width: 140px;
+}
+
+.user-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.user-role {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+/* Main content workspace */
+.main-content {
+    margin-left: 260px;
+    flex-grow: 1;
+    padding: 40px;
+    max-width: 1300px;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.page-title h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.page-title p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+/* ==========================================================================
+   Alerts & Notifications
+   ========================================================================== */
+
+.alert {
+    padding: 15px 20px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 500;
+    animation: fadeIn 0.4s ease-out;
+}
+
+.alert-success {
+    background: rgba(34, 197, 94, 0.15);
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    color: #4ADE80;
+}
+
+.alert-error {
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #FCA5A5;
+}
+
+/* ==========================================================================
+   Cards & Grids
+   ========================================================================== */
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 30px;
+}
+
+/* Places Cards */
+.place-card {
+    background: var(--card-dark);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    backdrop-filter: blur(10px);
+}
+
+.place-card:hover {
+    transform: translateY(-8px);
+    border-color: rgba(34, 197, 94, 0.3);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+}
+
+.place-card-img {
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+.place-category-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: white;
+}
+
+.badge-gem { background: linear-gradient(135deg, #8B5CF6, #6D28D9); }
+.badge-food { background: linear-gradient(135deg, #EF4444, #B91C1C); }
+.badge-attraction { background: linear-gradient(135deg, #3B82F6, #1D4ED8); }
+.badge-scenic { background: linear-gradient(135deg, #10B981, #047857); }
+
+.place-card-body {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.place-card-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.place-card-location {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* BUG FIX (feature request #3 - surface the saved MAPS_LINK) */
+.maps-link {
+    color: #16A34A;
+    font-weight: 600;
+    text-decoration: none;
+}
+.maps-link:hover {
+    text-decoration: underline;
+}
+
+.place-card-desc {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-bottom: 20px;
+    flex-grow: 1;
+}
+
+.place-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding-top: 15px;
+    margin-top: auto;
+}
+
+.place-cost {
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.place-cost span {
+    color: var(--primary-green);
+    font-weight: 700;
+}
+
+/* ==========================================================================
+   Buttons & Action Inputs
+   ========================================================================== */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    outline: none;
+}
+
+.btn-primary {
+    background: var(--primary-green);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: var(--primary-hover);
+    transform: translateY(-1px);
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--card-border);
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.btn-danger {
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #FCA5A5;
+}
+
+.btn-danger:hover {
+    background: var(--danger);
+    color: white;
+}
+
+.btn-sm {
+    padding: 8px 16px;
+    font-size: 0.85rem;
+}
+
+.btn-block {
+    width: 100%;
+}
+
+/* Action Dropdown inside Places Card */
+.add-trip-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    bottom: 100%;
+    right: 0;
+    background: #17233A;
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    min-width: 180px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    z-index: 10;
+    margin-bottom: 8px;
+    overflow: hidden;
+}
+
+.add-trip-dropdown:hover .dropdown-menu {
+    display: block;
+    animation: slideUp 0.2s ease;
+}
+
+.dropdown-menu a {
+    display: block;
+    padding: 10px 15px;
+    color: white;
+    font-size: 0.85rem;
+    transition: background 0.2s;
+    text-align: left;
+}
+
+.dropdown-menu a:hover {
+    background: rgba(34, 197, 94, 0.15);
+    color: var(--primary-green);
+}
+
+/* ==========================================================================
+   Filter & Search Panels
+   ========================================================================== */
+
+.filter-panel {
+    background: var(--card-dark);
+    border: 1px solid var(--card-border);
+    padding: 24px;
+    border-radius: 16px;
+    margin-bottom: 35px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: center;
+    justify-content: space-between;
+    backdrop-filter: blur(10px);
+}
+
+.search-form {
+    display: flex;
+    gap: 10px;
+    flex-grow: 1;
+    max-width: 500px;
+}
+
+.search-input {
+    flex-grow: 1;
+    padding: 12px 18px;
+    border-radius: 8px;
+    background: var(--input-bg);
+    border: 1px solid var(--card-border);
+    color: white;
+    font-size: 0.95rem;
+    transition: all 0.2s;
+}
+
+.search-input:focus {
+    border-color: var(--primary-green);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.15);
+}
+
+.category-filters {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+}
+
+.filter-chip {
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--card-border);
+    color: var(--text-muted);
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.filter-chip:hover,
+.filter-chip.active {
+    background: var(--primary-green);
+    color: white;
+    border-color: var(--primary-green);
+}
+
+/* ==========================================================================
+   Forms & Card Formats
+   ========================================================================== */
+
+.form-card {
+    background: var(--card-dark);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 40px;
+    max-width: 600px;
+    margin: 0 auto;
+    backdrop-filter: blur(10px);
+}
+
+.form-group {
+    margin-bottom: 24px;
+}
+
+.form-label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--text-muted);
+}
+
+/* BUG FIX (Location accuracy - Maps Link helper text): small explanatory
+   text under a field, used on add_place.jsp to explain the Google Maps
+   link auto-fill behavior. */
+.form-hint {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 6px;
+    line-height: 1.4;
+}
+
+.form-control {
+    width: 100%;
+    padding: 14px 18px;
+    border-radius: 8px;
+    background: var(--input-bg);
+    border: 1px solid var(--card-border);
+    color: white;
+    font-size: 0.95rem;
+    transition: all 0.2s;
+}
+
+.form-control:focus {
+    border-color: var(--primary-green);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.15);
+}
+
+select.form-control {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394A3B8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 18px center;
+    background-size: 16px;
+    padding-right: 45px;
+}
+
+.presets-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.preset-badge {
+    padding: 6px 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--card-border);
+    border-radius: 20px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: var(--text-muted);
+}
+
+.preset-badge:hover {
+    border-color: var(--primary-green);
+    color: var(--primary-green);
+}
+
+/* ==========================================================================
+   Itinerary Timeline & Trips Display
+   ========================================================================== */
+
+.trip-card {
+    background: var(--card-dark);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 30px;
+    margin-bottom: 40px;
+    backdrop-filter: blur(10px);
+}
+
+.trip-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 20px;
+    margin-bottom: 25px;
+}
+
+.trip-title-details h2 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.trip-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.trip-stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.trip-stat-item span.highlight {
+    color: var(--primary-green);
+    font-weight: 700;
+}
+
+.trip-actions {
+    display: flex;
+    gap: 10px;
+}
+
+/* Route Timeline Component */
+.timeline {
+    position: relative;
+    padding-left: 30px;
+    margin: 20px 0;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 10px;
+    bottom: 10px;
+    width: 2px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.timeline-item {
+    position: relative;
+    padding-bottom: 30px;
+}
+
+.timeline-item:last-child {
+    padding-bottom: 0;
+}
+
+.timeline-marker {
+    position: absolute;
+    left: -30px;
+    top: 5px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--bg-dark);
+    border: 3px solid var(--primary-green);
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.timeline-marker::after {
+    content: attr(data-order);
+    font-size: 0.65rem;
+    font-weight: 800;
+    color: white;
+}
+
+.timeline-content {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: background 0.2s;
+}
+
+.timeline-content:hover {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.timeline-place-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.timeline-place-thumb {
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    background-size: cover;
+    background-position: center;
+}
+
+.timeline-place-meta h4 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.timeline-place-meta p {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.timeline-place-category {
+    font-size: 0.75rem;
+    padding: 2px 8px;
+    border-radius: 12px;
+    display: inline-block;
+    margin-left: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+/* Distance Connector Line */
+.distance-connector {
+    position: absolute;
+    left: -35px;
+    bottom: -15px;
+    width: 120px;
+    text-align: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--accent-blue);
+    background: rgba(59, 130, 246, 0.12);
+    border: 1px solid rgba(59, 130, 246, 0.25);
+    padding: 2px 8px;
+    border-radius: 12px;
+    z-index: 3;
+    pointer-events: none;
+    transform: rotate(90deg) translateX(-15px);
+    transform-origin: left center;
+}
+
+/* Empty State visual */
+.empty-state {
+    text-align: center;
+    padding: 50px 20px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 2px dashed rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+}
+
+.empty-state h3 {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+    color: var(--text-white);
+}
+
+.empty-state p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    margin-bottom: 25px;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* ==========================================================================
+   Animations
+   ========================================================================== */
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        border-right: none;
+        border-bottom: 1px solid var(--card-border);
+    }
+    
+    .app-container {
+        flex-direction: column;
+    }
+    
+    .main-content {
+        margin-left: 0;
+        padding: 20px;
+    }
+}
+
+/* ==========================================================================
+   Phase 1: Search-First Hero Dashboard
+   ========================================================================== */
+
+.hero-search {
+    max-width: 820px;
+    margin: 8vh auto 0;
+    text-align: center;
+    padding: 0 20px;
+}
+
+.hero-search h1 {
+    font-size: 2.4rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+}
+
+.hero-subtitle {
+    color: var(--text-muted);
+    font-size: 1.05rem;
+    margin-bottom: 35px;
+}
+
+.hero-search-form {
+    display: flex;
+    gap: 12px;
+    max-width: 620px;
+    margin: 0 auto;
+}
+
+.hero-search-input {
+    flex-grow: 1;
+    padding: 18px 24px;
+    border-radius: 14px;
+    background: var(--input-bg);
+    border: 1px solid var(--card-border);
+    color: white;
+    font-size: 1.05rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+.hero-search-input:focus {
+    outline: none;
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.15);
+}
+
+.hero-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-top: 50px;
+    text-align: left;
+}
+
+.hero-column h4 {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+}
+
+.chip-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.muted-note {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+@media (max-width: 768px) {
+    .hero-columns { grid-template-columns: 1fr; }
+    .hero-search-form { flex-direction: column; }
+}
+
+/* ==========================================================================
+   Phase 1: Bookmarks, Ratings, Contributor Credit
+   ========================================================================== */
+
+.bookmark-btn {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: rgba(10, 15, 29, 0.6);
+    border: 1px solid var(--card-border);
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.bookmark-btn.saved {
+    background: rgba(34, 197, 94, 0.25);
+    border-color: var(--primary-green);
+}
+
+.bookmark-btn:hover {
+    transform: scale(1.1);
+}
+
+.rating-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.stars .star {
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.2);
+    font-size: 1.1rem;
+    transition: color 0.15s;
+}
+
+.stars .star.filled {
+    color: #F59E0B;
+}
+
+.stars:hover .star {
+    color: #F59E0B;
+}
+
+.rating-count {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.contributor-row {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-bottom: 15px;
+}
+
+/* ==========================================================================
+   Phase 1: Floating Action Buttons & Toast
+   ========================================================================== */
+
+.fab-stack {
+    position: fixed;
+    right: 32px;
+    bottom: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    z-index: 200;
+}
+
+.fab {
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    transition: transform 0.2s;
+}
+
+.fab:hover {
+    transform: translateY(-4px) scale(1.05);
+}
+
+.fab-primary {
+    background: linear-gradient(135deg, var(--primary-green), var(--primary-hover));
+}
+
+.fab-secondary {
+    background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+}
+
+.toast {
+    position: fixed;
+    left: 50%;
+    bottom: 30px;
+    transform: translateX(-50%) translateY(20px);
+    background: #17233A;
+    border: 1px solid var(--card-border);
+    color: white;
+    padding: 14px 24px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    z-index: 999;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* ==========================================================================
+   Phase 1: Community Contribution Form Extras
+   ========================================================================== */
+
+.form-row-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.file-drop {
+    border: 2px dashed var(--card-border);
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.file-drop:hover {
+    border-color: var(--primary-green);
+    color: var(--primary-green);
+}
+
+/* ==========================================================================
+   Phase 2: Map & AI Itinerary Day Grouping
+   ========================================================================== */
+
+.trip-map {
+    width: 100%;
+    height: 380px;
+    border-radius: 16px;
+    margin-bottom: 25px;
+    border: 1px solid var(--card-border);
+}
+
+/* ==========================================================================
+   NEW FEATURE: Google-Maps-style live navigation (trips.jsp)
+   ========================================================================== */
+
+.trip-map-wrap {
+    position: relative;
+    margin-bottom: 25px;
+}
+.trip-map-wrap .trip-map {
+    margin-bottom: 0;
+}
+
+.trip-nav-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.btn-locate {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: linear-gradient(135deg, var(--primary-green), var(--accent-blue));
+    color: var(--text-white);
+    border: none;
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.88rem;
+    cursor: pointer;
+    transition: opacity 0.2s ease, transform 0.15s ease;
+}
+.btn-locate:hover {
+    opacity: 0.92;
+    transform: translateY(-1px);
+}
+.btn-locate:disabled {
+    cursor: default;
+    opacity: 0.75;
+    transform: none;
+}
+
+/* Live route distance/time summary, shown once a route is calculated */
+.route-summary-badge {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--card-dark);
+    border: 1px solid var(--card-border);
+    color: var(--text-white);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.btn-directions-toggle {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--card-border);
+    color: var(--text-white);
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+.btn-directions-toggle:hover {
+    background: rgba(255, 255, 255, 0.16);
+}
+
+.route-status {
+    font-size: 0.82rem;
+    color: var(--danger);
+    margin-top: 6px;
+}
+
+/* "You are here" pulsing marker - Google-Maps-style live position dot,
+   restyled with Backpackr's accent blue to fit the dark theme instead of
+   Google's default red/blue. */
+.you-are-here-icon {
+    position: relative;
+    width: 22px;
+    height: 22px;
+}
+.you-are-here-dot {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--accent-blue);
+    border: 2px solid var(--text-white);
+    box-shadow: 0 0 6px rgba(59, 130, 246, 0.9);
+}
+.you-are-here-pulse {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: rgba(59, 130, 246, 0.45);
+    animation: you-are-here-pulse-anim 1.8s ease-out infinite;
+}
+@keyframes you-are-here-pulse-anim {
+    0%   { transform: scale(0.4); opacity: 1; }
+    100% { transform: scale(1.6); opacity: 0; }
+}
+
+/* Leaflet Routing Machine's default itinerary/instructions panel is never
+   shown at all - Backpackr builds its own Google-Maps-style fullscreen
+   "Directions" view instead (see .nav-modal below), which looks and
+   behaves far better than trying to restyle the plugin's own panel. */
+.trip-map-wrap .leaflet-routing-container {
+    display: none;
+}
+
+/* ==========================================================================
+   NEW FEATURE: Google-Maps-style fullscreen "Directions" view
+   ========================================================================== */
+
+.nav-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    background: var(--bg-dark);
+    flex-direction: column;
+}
+.nav-modal.open {
+    display: flex;
+}
+
+.nav-modal-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 14px 20px;
+    background: var(--card-dark);
+    border-bottom: 1px solid var(--card-border);
+}
+
+.nav-modal-route-info {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    color: var(--text-white);
+    font-weight: 700;
+    font-size: 1.05rem;
+}
+.nav-modal-route-info span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.nav-modal-close {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--card-border);
+    color: var(--text-white);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    font-size: 1rem;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+.nav-modal-close:hover {
+    background: rgba(255, 255, 255, 0.16);
+}
+
+.nav-modal-body {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+}
+
+.nav-modal-steps {
+    width: 360px;
+    flex-shrink: 0;
+    overflow-y: auto;
+    background: var(--card-dark);
+    border-right: 1px solid var(--card-border);
+    padding: 8px 0;
+}
+
+.nav-modal-map {
+    flex: 1;
+    min-width: 0;
+}
+
+.nav-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--card-border);
+    color: var(--text-white);
+}
+.nav-step-icon {
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    width: 26px;
+    text-align: center;
+}
+.nav-step-text {
+    flex: 1;
+    font-size: 0.92rem;
+    line-height: 1.4;
+}
+.nav-step-distance {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+/* Small screens: stack the steps panel above the map instead of beside it */
+@media (max-width: 780px) {
+    .nav-modal-body {
+        flex-direction: column;
+    }
+    .nav-modal-steps {
+        width: 100%;
+        max-height: 40vh;
+        border-right: none;
+        border-bottom: 1px solid var(--card-border);
+    }
+}
+
+/* ==========================================================================
+   REDESIGN: "Plan with AI" modal (distance / time / location search)
+   Reuses .nav-modal for the fullscreen dark overlay shell; these are the
+   modal's own content styles.
+   ========================================================================== */
+.plan-modal-body {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+}
+
+.plan-modal-controls {
+    width: 340px;
+    flex-shrink: 0;
+    padding: 22px;
+    background: var(--card-dark);
+    border-right: 1px solid var(--card-border);
+    overflow-y: auto;
+}
+
+.plan-mode-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+.plan-mode-tab {
+    flex: 1;
+    padding: 9px 6px;
+    border-radius: 10px;
+    border: 1px solid var(--card-border);
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+}
+.plan-mode-tab.active {
+    background: linear-gradient(135deg, var(--primary-green), var(--accent-blue));
+    color: white;
+    border-color: transparent;
+}
+
+.plan-mode-field {
+    margin-bottom: 18px;
+}
+
+.plan-anchor-note {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+    line-height: 1.4;
+    min-height: 1em;
+}
+
+.plan-modal-results {
+    flex: 1;
+    min-width: 0;
+    overflow-y: auto;
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.plan-results-empty {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    text-align: center;
+    margin-top: 40px;
+}
+
+.plan-result-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 14px 18px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--card-border);
+}
+.plan-result-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+.plan-result-info strong {
+    color: var(--text-white);
+    font-size: 0.95rem;
+}
+.plan-result-meta {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+}
+.plan-result-card.plan-result-added {
+    opacity: 0.6;
+}
+
+@media (max-width: 780px) {
+    .plan-modal-body {
+        flex-direction: column;
+    }
+    .plan-modal-controls {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid var(--card-border);
+    }
+}
+
+.day-group {
+    margin-bottom: 22px;
+}
+
+.day-group-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--primary-green);
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.ai-summary-banner {
+    background: rgba(139, 92, 246, 0.12);
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    color: #C4B5FD;
+    padding: 16px 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.ai-note {
+    font-size: 0.8rem;
+    color: #A78BFA;
+    margin-top: 6px;
+    font-style: italic;
+}
+
+.pref-form .form-group label.pref-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* =====================================================
+   Modern Add Place Page Additions
+   ===================================================== */
+
+.add-place-wrapper {
+    max-width: 1000px;
+    margin: auto;
+}
+
+.add-place-card {
+    background: rgba(18, 27, 46, .78);
+    border: 1px solid rgba(255, 255, 255, .08);
+    backdrop-filter: blur(18px);
+    border-radius: 22px;
+    overflow: hidden;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, .35);
+}
+
+.add-place-banner {
+    padding: 40px;
+    background: linear-gradient(135deg, #22C55E, #3B82F6);
+    color: white;
+}
+
+.add-place-banner h2 {
+    font-size: 32px;
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+.add-place-banner p {
+    opacity: .9;
+    line-height: 1.6;
+}
+
+/* ==========================================================================
+   REDESIGN: profile.jsp hero banner + read-only/edit toggle
+   ========================================================================== */
+
+.profile-hero {
+    display: flex;
+    align-items: center;
+    gap: 26px;
+    padding: 36px 40px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #22C55E, #3B82F6);
+    color: white;
+    margin-bottom: 28px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, .25);
+}
+
+.profile-hero-avatar-wrap {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.profile-hero-avatar-img,
+.profile-hero-avatar-fallback {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    border: 3px solid rgba(255, 255, 255, 0.6);
+}
+
+.profile-hero-avatar-img {
+    object-fit: cover;
+}
+
+.profile-hero-avatar-fallback {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.18);
+    font-size: 2.4rem;
+    font-weight: 800;
+}
+
+.profile-hero-camera-btn {
+    position: absolute;
+    bottom: -2px;
+    right: -2px;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--card-dark);
+    border: 2px solid white;
+    color: white;
+    font-size: 0.95rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.profile-hero-camera-btn:hover {
+    background: rgba(0, 0, 0, 0.6);
+}
+
+.profile-hero-info h2 {
+    font-size: 1.6rem;
+    font-weight: 800;
+    margin-bottom: 4px;
+}
+.profile-hero-info p {
+    opacity: 0.9;
+    margin-bottom: 14px;
+}
+.profile-hero-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    font-size: 0.88rem;
+}
+.profile-hero-stats strong {
+    font-weight: 800;
+}
+
+.profile-details-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+}
+.profile-details-header h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-white);
+}
+
+.profile-detail-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--card-border);
+}
+.profile-detail-row:last-child {
+    border-bottom: none;
+}
+.profile-detail-label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+.profile-detail-value {
+    font-size: 0.95rem;
+    color: var(--text-white);
+    font-weight: 600;
+    text-align: right;
+}
+
+@media (max-width: 640px) {
+    .profile-hero {
+        flex-direction: column;
+        text-align: center;
+    }
+    .profile-hero-stats {
+        justify-content: center;
+    }
+}
+
+/* ==========================================================================
+   REDESIGN: shared gradient hero banner for saved_places.jsp,
+   create_trip.jsp - lighter-weight version of .profile-hero (no avatar),
+   for pages that just need a nicer header than the plain .page-header text.
+   ========================================================================== */
+.page-hero {
+    padding: 34px 40px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #22C55E, #3B82F6);
+    color: white;
+    margin-bottom: 28px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, .25);
+}
+.page-hero h1 {
+    font-size: 1.7rem;
+    font-weight: 800;
+    margin-bottom: 8px;
+}
+.page-hero p {
+    opacity: 0.92;
+    line-height: 1.5;
+    max-width: 620px;
+}
+.page-hero-count {
+    display: inline-block;
+    margin-top: 14px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.18);
+    font-size: 0.82rem;
+    font-weight: 700;
+}
+
+.add-place-form {
+    padding: 40px;
+}
+
+.form-section {
+    margin-bottom: 40px;
+}
+
+.form-section-title {
+    font-size: 20px;
+    margin-bottom: 20px;
+    font-weight: 700;
+    color: white;
+    border-left: 4px solid #22C55E;
+    padding-left: 12px;
+}
+
+.form-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.form-grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+}
+
+textarea.form-control {
+    resize: vertical;
+    min-height: 130px;
+}
+
+.form-control {
+    border-radius: 12px;
+}
+
+.form-control:focus {
+    transform: translateY(-2px);
+}
+
+.image-upload-box {
+    border: 2px dashed rgba(255, 255, 255, .15);
+    border-radius: 18px;
+    text-align: center;
+    padding: 35px;
+    transition: .3s;
+}
+
+.image-upload-box:hover {
+    border-color: #22C55E;
+    background: rgba(34, 197, 94, .05);
+}
+
+.publish-area {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 40px;
+}
+
+.publish-btn {
+    padding: 16px 42px;
+    font-size: 17px;
+    border-radius: 12px;
+}
+
+@media(max-width:768px) {
+    .form-grid-2,
+    .form-grid-3 {
+        grid-template-columns: 1fr;
+    }
+    .add-place-banner,
+    .add-place-form {
+        padding: 25px;
+    }
+}
