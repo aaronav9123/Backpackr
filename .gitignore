@@ -1,0 +1,37 @@
+# Java build output
+build/
+target/
+bin/
+out/
+
+# Eclipse generated files
+.classpath
+.project
+.settings/
+
+# Secrets / configuration
+src/main/java/config.properties
+build/classes/config.properties
+config.properties
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Uploaded user files
+src/main/webapp/uploads/
