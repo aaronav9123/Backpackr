@@ -1,13 +1,14 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="com.backpackr.util.HtmlUtils" %>
 <%-- Shared sidebar. Include with: String activePage = "home"; before <%@ include file="_sidebar.jsp" %> --%>
 <aside class="sidebar">
     <div class="logo-container">🎒 Backpackr<span>.</span></div>
     <ul class="nav-links">
-        <li class="<%= "home".equals(activePage) ? "active" : "" %>"><a href="home.jsp">🔍 Home</a></li>
-        <li class="<%= "trips".equals(activePage) ? "active" : "" %>"><a href="trips.jsp">✈️ My Trips</a></li>
-        <li class="<%= "saved".equals(activePage) ? "active" : "" %>"><a href="saved_places.jsp">🔖 Saved Places</a></li>
+        <li class="<%= "home".equals(activePage) ? "active" : "" %>"><a href="home.jsp">🏠 Home</a></li>
+        <li class="<%= "trips".equals(activePage) ? "active" : "" %>"><a href="trips.jsp">✈️ My Trips</a></li>
+        <li class="<%= "saved".equals(activePage) ? "active" : "" %>"><a href="saved_places.jsp">📌 Saved Places</a></li>
         <li class="<%= "addplace".equals(activePage) ? "active" : "" %>"><a href="add_place.jsp">➕ Add Place</a></li>
-        <li class="<%= "profile".equals(activePage) ? "active" : "" %>"><a href="profile.jsp">👤 Profile</a></li>
+        <li class="<%= "profile".equals(activePage) ? "active" : "" %>"><a href="profile.jsp">😊 Profile</a></li>
     </ul>
     <div class="user-profile-section">
         <%-- NEW FEATURE (Profile enhancements): show the uploaded profile
@@ -28,6 +29,6 @@
             <span class="user-name"><%= HtmlUtils.esc(currentUser.getName()) %></span>
             <span class="user-role">Explorer</span>
         </div>
-        <a href="logout" style="margin-left:auto; font-size:1.2rem; color:var(--danger);" title="Logout">🚪</a>
+        <a href="logout" style="margin-left:auto; font-size:1.2rem; color:var(--danger);" title="Logout">⏻</a>
     </div>
 </aside>
