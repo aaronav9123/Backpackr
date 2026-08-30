@@ -32,14 +32,7 @@
     <link rel="stylesheet" href="css/style.css?v=3">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <%-- NEW FEATURE (Google-Maps-style live navigation): Leaflet Routing
-         Machine plugs real road-based routing into the existing Leaflet
-         map - no Google Maps API key needed, consistent with the rest of
-         Backpackr's map stack. It talks to the public OSRM demo routing
-         server (router.project-osrm.org) by default, same way this plugin
-         is normally used for free/no-signup road routing. See the
-         "Use My Current Location" script block below for how it's wired
-         up, and CODE_REVIEW_REPORT.md for production/rate-limit notes. --%>
+
     <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
     <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
 </head>
@@ -59,12 +52,7 @@
                 <p>Manage your itineraries, view your route on the map, and let AI plan for you.</p>
             </div>
             <div style="display:flex; gap:10px;">
-                <%-- BUG FIX (Broken navigation): saved_trips.jsp and
-                     saved_trip_details.jsp are a fully-built gallery/detail
-                     view (search, sort, edit modal, share, Leaflet map) that
-                     had no link pointing to them anywhere in the app - they
-                     were completely unreachable from the UI. This link
-                     wires that feature back into the site. --%>
+
                 <a href="saved_trips.jsp" class="btn btn-secondary">🔖 Saved Trips Gallery</a>
                 <a href="create_trip.jsp" class="btn btn-primary">➕ Create New Trip</a>
             </div>
@@ -99,22 +87,7 @@
                             byDay.computeIfAbsent(s.getDayNumber(), k -> new java.util.ArrayList<>()).add(s);
                         }
 
-                        // BUG FIX (user report - inaccurate header stats):
-                        // this header used to always show a static
-                        // straight-line Haversine "Route: X km / ~Y hrs"
-                        // estimate, and a "Budget: Rs. Y" figure that was
-                        // frequently just a hardcoded placeholder (10000)
-                        // from the quick "Add to Trip" flow rather than
-                        // anything derived from the trip's actual places -
-                        // neither was trustworthy. The straight-line route
-                        // estimate is removed entirely (the real,
-                        // road-accurate distance/time now only ever comes
-                        // from the "Use My Current Location" live
-                        // navigation feature, which measures it for real).
-                        // Budget is now a real sum of every stop's place
-                        // AVG_COST, shown only when at least one place in
-                        // the trip actually has cost data - never a
-                        // meaningless default number.
+
                         double estimatedTripCost = 0;
                         for (TripStop s : stops) {
                             estimatedTripCost += s.getAvgCost();
@@ -142,20 +115,11 @@
                             <a href="saved_trip_details.jsp?tripId=<%= t.getTripId() %>" class="btn btn-secondary btn-sm">
                                 🔎 View Details
                             </a>
-                            <%-- REDESIGN (per user request): "Plan with AI" now opens an
-                                 in-page modal (find places by distance/time/location and
-                                 add them straight to this trip) instead of navigating away
-                                 to a separate page. See the script block below for
-                                 openPlanModal_<tripId>(). --%>
+ 
                             <button type="button" class="btn btn-secondary btn-sm" style="color: #C4B5FD; border-color: rgba(139, 92, 246, 0.3);" onclick="openPlanModal_<%= t.getTripId() %>()">
                                 🤖 Plan with AI
                             </button>
-                            <%-- BUG FIX (per user request - "Optimize Route" removed): the
-                                 route-reordering form that used to sit here has been deleted
-                                 outright. TripServlet's handleOptimizeRoute()/action=optimize
-                                 is left in place server-side (dormant/unused) rather than
-                                 deleted, in case it's wanted back later - nothing links to it
-                                 anymore. --%>
+
                             <form action="trip" method="post" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this entire trip?');">
                                 <input type="hidden" name="action" value="delete">
                                 <input type="hidden" name="tripId" value="<%= t.getTripId() %>">
@@ -168,24 +132,7 @@
                         <div class="ai-summary-banner">🤖 <%= HtmlUtils.esc(t.getAiSummary()) %></div>
                     <% } %>
 
-                    <%-- BUG FIX (per user request - trips created with no
-                         places yet had no way to add any): this used to wrap
-                         the ENTIRE map/toolbar/"Use My Current Location"/
-                         "Plan with AI" modal block in "if stops.isEmpty()
-                         show a plain text message, else show all of that" -
-                         meaning a freshly created trip (which now normally
-                         starts with zero stops, see the "optional fields"
-                         fix) had no way to open Plan with AI at all: the
-                         button was visible, but the modal markup and its
-                         JavaScript were never rendered, so clicking it
-                         called an undefined function and did nothing. The
-                         map/toolbar/modals now always render - the map
-                         itself shows a friendly "no stops yet" placeholder
-                         instead of an empty Leaflet map when there's
-                         nothing to plot (see the script below), and the
-                         day-wise itinerary loop further down is already a
-                         no-op on its own when there are no stops, so it
-                         never needed this wrapper either. --%>
+
                     <% if (stops.isEmpty()) { %>
                         <div style="padding: 4px 0 16px; text-align: center; color: var(--text-muted); font-size: 0.9rem;">
                             No stops added yet - search for places and tap <strong>➕ Add to Trip</strong>, or use <strong>Plan with AI</strong> above to find some.
@@ -193,18 +140,7 @@
                     <% } %>
 
                         <!-- Route Map (Leaflet + OpenStreetMap - no API key required) -->
-                        <%--
-                            NEW FEATURE (Google-Maps-style live navigation):
-                            the map container now wraps a small toolbar (the
-                            "Use My Current Location" button + a live
-                            distance/time summary badge that appears once a
-                            route is calculated) around the existing Leaflet
-                            map. Everything here is additive - with
-                            JavaScript disabled, or before the button is
-                            clicked, the page behaves exactly as it did
-                            before (the plain multi-stop map from the
-                            previous fix).
-                        --%>
+
                         <div class="trip-map-wrap">
                             <div class="trip-nav-toolbar">
                                 <button type="button" class="btn-locate" id="locate-btn-<%= t.getTripId() %>" onclick="backpackrStartLiveNav_<%= t.getTripId() %>()">
@@ -216,18 +152,7 @@
                             <div class="route-status" id="route-status-<%= t.getTripId() %>"></div>
                         </div>
 
-                        <%--
-                            NEW FEATURE (Google-Maps-style "Directions" view):
-                            replaces Leaflet Routing Machine's cramped, plain
-                            default itinerary panel. Clicking "Directions" in
-                            the route summary badge above opens this as a
-                            fullscreen dark overlay - a turn-by-turn list on
-                            one side, a large focused map on the other, the
-                            way Google Maps' own navigation view looks. It's
-                            empty markup until JS fills it in (see the script
-                            block below); with JavaScript disabled it simply
-                            never opens.
-                        --%>
+
                         <div class="nav-modal" id="nav-modal-<%= t.getTripId() %>">
                             <div class="nav-modal-topbar">
                                 <div class="nav-modal-route-info" id="nav-modal-info-<%= t.getTripId() %>"></div>
@@ -239,14 +164,7 @@
                             </div>
                         </div>
 
-                        <%--
-                            REDESIGN (per user request): "Plan with AI" modal.
-                            Search Backpackr's own places by distance, travel
-                            time, or a typed location, and add results
-                            straight to this trip - no page navigation, and
-                            adding a result refreshes the trip below so the
-                            map/stop list reflect it immediately.
-                        --%>
+
                         <div class="nav-modal" id="plan-modal-<%= t.getTripId() %>">
                             <div class="nav-modal-topbar">
                                 <div class="nav-modal-route-info"><span>🤖 Plan with AI</span></div>
@@ -373,68 +291,22 @@
                             var navModalStepsEl = document.getElementById('nav-modal-steps-' + tripId);
                             var navModalMapEl = document.getElementById('nav-modal-map-' + tripId);
 
-                            // State shared between the base map below and the
-                            // live-navigation feature further down. Declared up
-                            // front (rather than only inside the branches that
-                            // create them) so the click handler registered right
-                            // below can always safely check "is there a map yet"
-                            // instead of risking a ReferenceError.
+
                             var map = null;
                             var validStops = [];
                             var routingControl = null;
                             var userMarker = null;
                             var watchId = null;
                             var lastRecalcLatLng = null;
-                            // The full route Leaflet Routing Machine last
-                            // calculated (distance/time summary, the actual
-                            // road-following coordinates, and turn-by-turn
-                            // instructions) - captured once here so the
-                            // "Directions" fullscreen view can build its map
-                            // and steps list straight from data already
-                            // fetched, instead of asking the routing service
-                            // for the same route a second time.
+
                             var lastRoute = null;
                             var navModalMap = null;
                             var navModalRouteLayer = null;
                             var navModalMarkers = [];
                             var navModalFormatter = null;
-                            // The plain straight-line polyline drawn between
-                            // stops by the base map further down - kept in
-                            // scope so live navigation can remove it once a
-                            // real road route is available (see bug fix
-                            // where this used to stay on the map, showing a
-                            // second "as the crow flies" line alongside the
-                            // proper road route).
-                            var baseStraightLineRoute = null;
 
-                            // ================================================================
-                            // NEW FEATURE - Google-Maps-style live navigation
-                            // ================================================================
-                            // How it works:
-                            //  - navigator.geolocation gets the browser's current
-                            //    GPS/network position (requires the person to grant
-                            //    permission, and requires HTTPS in production -
-                            //    browsers only allow geolocation on "secure
-                            //    contexts"; localhost is exempted for testing).
-                            //  - Leaflet Routing Machine (loaded in <head>) draws a
-                            //    real road route - not a straight line - from that
-                            //    position through every valid stop, in the trip's
-                            //    existing order, using the free public OSRM
-                            //    routing service (no Google Maps API key needed,
-                            //    same approach as the rest of Backpackr's maps).
-                            //  - watchPosition keeps updating the user's marker and
-                            //    recalculating the route as they move, throttled so
-                            //    it doesn't spam the routing service on every tiny
-                            //    GPS jitter.
-                            //  - The default turn-by-turn panel Leaflet Routing
-                            //    Machine normally shows is hidden by CSS
-                            //    (.leaflet-routing-container) until the person
-                            //    taps "Directions", which just toggles a class.
-                            //
-                            // This whole feature is opt-in (only runs once the
-                            // "Use My Current Location" button is clicked), so it
-                            // never touches the page on its own and the rest of
-                            // Backpackr keeps working exactly as before.
+
+                            var baseStraightLineRoute = null;
 
                             var youAreHereIcon = L.divIcon({
                                 className: 'you-are-here-icon',
@@ -473,10 +345,7 @@
                                 }
                             }
 
-                            // Picks a simple direction icon for a turn-by-turn
-                            // step based on its type/modifier - purely a nice
-                            // visual touch, not load-bearing (falls back to a
-                            // plain arrow for anything unrecognized).
+
                             function iconForInstruction(instr) {
                                 var type = (instr.type || '').toLowerCase();
                                 var modifier = (instr.modifier || '').toLowerCase();
@@ -489,14 +358,7 @@
                                 return '\u2B06\uFE0F';
                             }
 
-                            // ================================================================
-                            // "Directions" fullscreen view (Google-Maps-style)
-                            // ================================================================
-                            // Renders the turn-by-turn list and the focused
-                            // route map from lastRoute - the same route data
-                            // the summary badge above was already built from,
-                            // so opening Directions never has to ask the
-                            // routing service for anything again.
+
                             function renderNavModalContent() {
                                 if (!lastRoute) return;
 
@@ -573,12 +435,7 @@
                             }
 
                             function buildOrUpdateRoute(current) {
-                                // BUG FIX (user report): the plain straight
-                                // "as the crow flies" line the base map draws
-                                // between stops was staying on the map even
-                                // after a real road route was calculated,
-                                // showing two overlapping lines. Remove it the
-                                // first time a real route is requested.
+
                                 if (baseStraightLineRoute) {
                                     map.removeLayer(baseStraightLineRoute);
                                     baseStraightLineRoute = null;
@@ -600,17 +457,10 @@
                                     addWaypoints: false,
                                     fitSelectedRoutes: true,
                                     show: false,
-                                    // We provide our own fullscreen "Directions"
-                                    // view (see openNavModal()) instead of ever
-                                    // showing Leaflet Routing Machine's default
-                                    // itinerary panel, so its built-in collapse
-                                    // arrow is switched off too.
+
                                     collapsible: false,
                                     lineOptions: { styles: [{ color: '#22C55E', weight: 5, opacity: 0.9 }] },
-                                    // We already render our own stop markers (and
-                                    // our own "you are here" marker) - suppressing
-                                    // Leaflet Routing Machine's default pin markers
-                                    // avoids duplicate/mismatched icons.
+
                                     createMarker: function() { return null; }
                                 });
 
@@ -626,11 +476,7 @@
                                     toggleBtn.onclick = openNavModal;
                                     statusEl.textContent = '';
 
-                                    // If the person already has the fullscreen
-                                    // Directions view open while their live
-                                    // position updates, keep it in sync too
-                                    // instead of only updating the small badge
-                                    // behind it.
+
                                     if (navModalEl.classList.contains('open')) {
                                         renderNavModalContent();
                                     }
@@ -654,24 +500,14 @@
                                     userMarker.setLatLng([current.lat, current.lng]);
                                 }
 
-                                // Throttle recalculation - only ask the routing
-                                // service for a new route if the person has moved
-                                // more than ~40m since the last calculation. Real
-                                // GPS readings jitter a few meters even standing
-                                // still, and OSRM's public demo server is a free,
-                                // shared, rate-limited resource - recalculating on
-                                // every single position event would both feel
-                                // jumpy and risk getting throttled.
+
                                 if (isFirstFix || !lastRecalcLatLng || haversineMeters(lastRecalcLatLng, current) > 40) {
                                     lastRecalcLatLng = current;
                                     buildOrUpdateRoute(current);
                                 }
                             }
 
-                            // Registered unconditionally, before any of the early
-                            // returns below, so the button never calls an
-                            // undefined function no matter what state this trip's
-                            // stop data is in.
+
                             window['backpackrStartLiveNav_' + tripId] = function() {
                                 if (!navigator.geolocation) {
                                     if (statusEl) statusEl.textContent = 'Your browser does not support geolocation.';
@@ -690,9 +526,7 @@
                                         locateBtn.textContent = '\uD83D\uDCCD Live Navigation Active';
                                         onPositionUpdate(position, true);
 
-                                        // Keep following the person's location and
-                                        // auto-updating the route as they move,
-                                        // until they leave the page.
+
                                         if (watchId === null) {
                                             watchId = navigator.geolocation.watchPosition(
                                                 function(pos) { onPositionUpdate(pos, false); },
@@ -754,10 +588,7 @@
                                 }
                             }
 
-                            // Registered unconditionally (same reasoning as the
-                            // live-nav handler above) so these buttons never
-                            // call an undefined function, even for a trip with
-                            // no stops at all.
+
                             window['openPlanModal_' + tripId] = function() {
                                 document.getElementById('plan-modal-' + tripId).classList.add('open');
                                 resolvePlanAnchor();
@@ -831,13 +662,7 @@
                                         if (data.success) {
                                             btn.textContent = '\u2713 Added';
                                             cardEl.classList.add('plan-result-added');
-                                            // Reload so the trip's stop list, map,
-                                            // day grouping, and cost total all
-                                            // reflect the new stop - the simplest
-                                            // reliable way to stay in sync with
-                                            // every other place this trip's data
-                                            // is rendered, rather than duplicating
-                                            // all of that logic here.
+
                                             setTimeout(function() { window.location.reload(); }, 600);
                                         } else {
                                             btn.disabled = false;
@@ -890,58 +715,22 @@
                                     });
                             };
 
-                            // ================================================================
-                            // Base map (existing feature) - plots every valid stop
-                            // with a marker and a straight connecting line. This
-                            // is unchanged from before; live navigation above
-                            // layers a real road route + current-location marker
-                            // on top of this same map once requested.
-                            // ================================================================
+
                             if (!mapEl) return;
                             if (stops.length === 0) {
-                                // BUG FIX (per user request): a freshly
-                                // created trip with zero stops used to leave
-                                // this whole area completely blank (an empty
-                                // gray box) since the code returned before
-                                // ever touching mapEl. It now shows the same
-                                // kind of friendly placeholder used when
-                                // stops exist but lack valid coordinates,
-                                // instead of nothing.
+
                                 mapEl.innerHTML = '<div style="display:flex; align-items:center; justify-content:center; height:100%; color:#64748B; font-size:0.9rem; text-align:center; padding:20px;">\uD83D\uDDFA\uFE0F Add a stop to this trip to see it on the map here.</div>';
                                 return;
                             }
 
-                            // BUG FIX (Location accuracy): stops saved before
-                            // AddPlaceServlet validated coordinates can still
-                            // have lat=0/lng=0 ("Null Island", out in the Gulf
-                            // of Guinea) sitting in the database. Plotting
-                            // those and fitting the map bounds to include them
-                            // used to drag the whole map out to the middle of
-                            // the ocean, hundreds of km from every real stop.
-                            // Markers/route/bounds now only ever consider
-                            // stops with plausible coordinates; anything at
-                            // (0, 0) is skipped on the map (it's still listed
-                            // normally in the stop list below).
+
                             function isPlausible(lat, lng) {
                                 return (lat !== 0 || lng !== 0) && lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180;
                             }
                             validStops = stops.filter(function(s) { return isPlausible(s.lat, s.lng); });
 
                             if (validStops.length === 0) {
-                                // BUG FIX (JS syntax error breaking the whole
-                                // map script): this string used to contain a
-                                // double backslash immediately followed by a
-                                // quote, intending to escape an apostrophe. In
-                                // JavaScript, \\ is an escaped backslash (not
-                                // an escaped quote), so that quote actually
-                                // closed the string early, producing a syntax
-                                // error. A syntax error anywhere in a <script>
-                                // block stops the ENTIRE block from running (JS
-                                // is parsed in full before any of it executes) -
-                                // so one bad line was silently breaking the map
-                                // for every trip, even ones with perfectly valid
-                                // coordinates. Reworded to avoid the apostrophe
-                                // entirely instead of relying on escaping.
+
                                 mapEl.innerHTML = '<div style="display:flex; align-items:center; justify-content:center; height:100%; color:#64748B; font-size:0.9rem; text-align:center; padding:20px;">\uD83D\uDCCD None of the stops in this trip have an accurate location yet.<br>Edit them with a Google Maps link to see them here.</div>';
                                 return;
                             }
